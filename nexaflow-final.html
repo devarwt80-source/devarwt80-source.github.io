@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaFlow AI — Global AI Automation Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#F5F0E8;--cream2:#EDE8DE;--black:#0A0A08;--black2:#111110;
+  --gold:#B8962E;--gold2:#D4AF50;--muted:#7A7568;--border:rgba(10,10,8,0.1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--black);font-family:'Inter',sans-serif;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s}
+.cursor-follower{position:fixed;width:36px;height:36px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .15s ease;opacity:.5}
+.cursor-follower.hover{transform:translate(-50%,-50%) scale(2);opacity:.2}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.8rem 5%}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;border-bottom:1px solid var(--border);padding-bottom:1.5rem}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.6rem;letter-spacing:1px}
+.logo em{color:var(--gold);font-style:italic}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--black)}
+.nav-right{display:flex;align-items:center;gap:2rem}
+.nav-globe{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.5rem}
+.nav-cta{font-size:.78rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:color .3s;display:flex;align-items:center;gap:.5rem}
+.nav-cta::after{content:'→';transition:transform .3s}
+.nav-cta:hover::after{transform:translateX(4px)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-left{padding:12rem 5% 5rem 5%;display:flex;flex-direction:column;justify-content:flex-end;border-right:1px solid var(--border);position:relative;z-index:1}
+.hero-right{position:relative;overflow:hidden;background:var(--black)}
+.hero-right-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 70% 30%,rgba(184,150,46,.15) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 30% 70%,rgba(184,150,46,.08) 0%,transparent 60%),linear-gradient(135deg,#0A0A08 0%,#1a1a16 50%,#0e0e0b 100%)}
+.hero-right-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:4rem}
+
+/* GLOBE ANIMATION */
+.globe-wrap{display:flex;align-items:center;justify-content:center;flex:1}
+.globe{width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);position:relative;animation:spin 30s linear infinite}
+@keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+.globe-ring{position:absolute;inset:-20px;border-radius:50%;border:1px solid rgba(184,150,46,.15);animation:spin 20s linear infinite reverse}
+.globe-ring2{position:absolute;inset:-40px;border-radius:50%;border:1px solid rgba(184,150,46,.08);animation:spin 35s linear infinite}
+.globe-dot{position:absolute;width:6px;height:6px;background:var(--gold2);border-radius:50%;animation:pulse 2s infinite}
+.globe-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--gold2);animation:ripple 2s infinite;opacity:.4}
+@keyframes ripple{from{transform:scale(1);opacity:.4}to{transform:scale(2.5);opacity:0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.gd1{top:15%;left:20%}
+.gd2{top:30%;right:15%}
+.gd3{bottom:25%;left:30%}
+.gd4{bottom:20%;right:25%}
+.gd5{top:50%;left:10%}
+.gd6{top:20%;right:40%}
+.globe-lines{position:absolute;inset:0;border-radius:50%;overflow:hidden;opacity:.15}
+.globe-lines::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(255,255,255,.3) 18px,rgba(255,255,255,.3) 19px)}
+.globe-lines::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(255,255,255,.3) 18px,rgba(255,255,255,.3) 19px)}
+
+.hero-stats-row{display:flex;flex-direction:column;gap:.8rem}
+.hero-stat-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);backdrop-filter:blur(10px)}
+.h-dot{width:6px;height:6px;border-radius:50%;background:var(--gold2);animation:pulse 2s infinite}
+.h-label{font-size:.72rem;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase}
+.h-val{margin-left:auto;font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(255,255,255,.85)}
+
+.hero-eyebrow{font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem}
+.hero-eyebrow::before{content:'';width:40px;height:1px;background:var(--gold)}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.2rem,5.5vw,5.5rem);font-weight:300;line-height:1.05;letter-spacing:-1px;margin-bottom:3rem}
+h1 em{font-style:italic;color:var(--gold)}
+h1 strong{font-weight:700;display:block}
+.hero-desc{font-size:.9rem;color:var(--muted);line-height:1.9;max-width:420px;margin-bottom:3.5rem;font-weight:300}
+.hero-btns{display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap}
+.btn-dark{background:var(--black);color:var(--cream);padding:1.1rem 2.5rem;font-size:.78rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .3s;border:1px solid var(--black)}
+.btn-dark:hover{background:var(--gold);border-color:var(--gold);color:var(--black)}
+.btn-text{font-size:.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.6rem;transition:color .3s}
+.btn-text:hover{color:var(--black)}
+
+/* GLOBAL STRIP */
+.global-strip{background:var(--black);padding:2.5rem 5%;overflow:hidden;border-top:1px solid rgba(255,255,255,.06)}
+.gs-inner{display:flex;align-items:center;gap:4rem;flex-wrap:wrap;justify-content:center}
+.gs-label{font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25);white-space:nowrap}
+.gs-countries{display:flex;gap:2rem;flex-wrap:wrap;align-items:center}
+.gs-country{display:flex;align-items:center;gap:.6rem;font-size:.78rem;color:rgba(255,255,255,.4);font-weight:300;transition:color .3s;white-space:nowrap}
+.gs-country:hover{color:rgba(255,255,255,.8)}
+.gs-country .flag{font-size:1.1rem}
+.gs-divider{width:1px;height:20px;background:rgba(255,255,255,.08)}
+
+/* MARQUEE */
+.marquee-wrap{padding:2rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
+.marquee-track{display:flex;animation:marquee 25s linear infinite;width:max-content}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-item{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;font-style:italic;color:var(--muted);padding:0 3rem;white-space:nowrap;border-right:1px solid var(--border)}
+
+/* PHILOSOPHY */
+.philosophy{padding:3rem 5%;border-bottom:1px solid var(--border);display:flex}
+.philosophy-item{flex:1;padding:2rem 3rem;border-right:1px solid var(--border)}
+.philosophy-item:last-child{border-right:none}
+.philosophy-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(10,10,8,.06);line-height:1;margin-bottom:.8rem}
+.philosophy-item h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;margin-bottom:.5rem}
+.philosophy-item p{font-size:.8rem;color:var(--muted);line-height:1.7;font-weight:300}
+
+/* CURRENCY TOGGLE */
+.currency-toggle{display:inline-flex;border:1px solid var(--border);overflow:hidden;margin-bottom:3rem}
+.ct-btn{padding:.6rem 1.4rem;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;cursor:pointer;transition:all .2s;border:none;background:transparent;color:var(--muted);font-family:'Inter',sans-serif}
+.ct-btn.active{background:var(--black);color:var(--cream)}
+
+/* SERVICES */
+.services-section{padding:8rem 5%}
+.section-header{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-bottom:2rem;align-items:end}
+.section-label-line{display:flex;align-items:center;gap:1rem;font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+.section-label-line::before{content:'';width:30px;height:1px;background:var(--gold)}
+.section-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;line-height:1.1;letter-spacing:-.5px}
+.section-header h2 em{font-style:italic;color:var(--gold)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border)}
+.service-card{padding:3rem 2.5rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;overflow:hidden;transition:background .4s;cursor:none}
+.service-card::after{content:'';position:absolute;inset:0;background:var(--black);transform:translateY(100%);transition:transform .5s cubic-bezier(.77,0,.175,1);z-index:0}
+.service-card:hover::after{transform:translateY(0)}
+.sc-content{position:relative;z-index:1}
+.service-card:hover .sc-title,.service-card:hover .sc-num{color:rgba(255,255,255,.1)}
+.service-card:hover .sc-title{color:white!important}
+.service-card:hover .sc-desc{color:rgba(255,255,255,.5)}
+.service-card:hover .sc-price{color:var(--gold2)}
+.service-card:hover .sc-arrow{color:var(--gold2)}
+.service-card:hover .sc-tag{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.3)}
+.sc-num{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(10,10,8,.06);line-height:1;margin-bottom:1.5rem;transition:color .4s}
+.sc-icon{font-size:1.8rem;margin-bottom:1rem}
+.sc-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;margin-bottom:.8rem;transition:color .4s}
+.sc-desc{font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:1.2rem;transition:color .4s;font-weight:300}
+.sc-price{font-size:.75rem;letter-spacing:1px;color:var(--gold);transition:color .4s;font-weight:500}
+.sc-tag{display:inline-block;margin-left:.8rem;padding:.15rem .6rem;border:1px solid var(--border);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);transition:all .3s}
+.sc-arrow{position:absolute;bottom:2.5rem;right:2.5rem;font-size:1.2rem;color:var(--border);transition:color .4s,transform .3s}
+.service-card:hover .sc-arrow{transform:translate(3px,-3px)}
+
+/* GLOBAL REACH */
+.global-reach{padding:8rem 5%;background:var(--black);color:var(--cream);position:relative;overflow:hidden}
+.global-reach::before{content:'GLOBAL';position:absolute;font-family:'Cormorant Garamond',serif;font-size:18rem;font-weight:700;color:rgba(255,255,255,.02);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;letter-spacing:-5px}
+.gr-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.gr-top{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:end;margin-bottom:5rem}
+.gr-top h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;line-height:1.1}
+.gr-top h2 em{font-style:italic;color:var(--gold2)}
+.gr-top p{font-size:.85rem;color:rgba(255,255,255,.4);line-height:1.9;font-weight:300}
+.countries-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(255,255,255,.06)}
+.country-card{padding:2.5rem 2rem;border-right:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);transition:background .3s;position:relative;overflow:hidden}
+.country-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold2);transform:scaleX(0);transition:transform .4s;transform-origin:left}
+.country-card:hover{background:rgba(255,255,255,.03)}
+.country-card:hover::after{transform:scaleX(1)}
+.cc-flag{font-size:2.5rem;margin-bottom:1rem;display:block}
+.cc-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--cream);margin-bottom:.3rem}
+.cc-region{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:1rem}
+.cc-industries{display:flex;flex-direction:column;gap:.3rem}
+.cc-ind{font-size:.72rem;color:rgba(255,255,255,.35);font-weight:300;display:flex;align-items:center;gap:.5rem}
+.cc-ind::before{content:'';width:12px;height:1px;background:rgba(255,255,255,.15)}
+.timezone-strip{margin-top:4rem;display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid rgba(255,255,255,.06);padding:0}
+.tz{padding:1.5rem 2rem;border-right:1px solid rgba(255,255,255,.06);text-align:center}
+.tz:last-child{border-right:none}
+.tz-city{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem}
+.tz-time{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);line-height:1}
+.tz-label{font-size:.65rem;color:rgba(255,255,255,.2);margin-top:.3rem;letter-spacing:1px}
+
+/* PROCESS */
+.process-section{padding:8rem 5%;background:var(--cream2);border-top:1px solid var(--border)}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);margin-top:4rem}
+.p-step{padding:3rem 2rem;border-right:1px solid var(--border)}
+.p-step:last-child{border-right:none}
+.p-step-num{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;color:rgba(10,10,8,.05);line-height:1;margin-bottom:1.5rem}
+.p-step-line{width:30px;height:1px;background:var(--gold);margin-bottom:1.5rem}
+.p-step h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;margin-bottom:.8rem}
+.p-step p{font-size:.78rem;color:var(--muted);line-height:1.8;font-weight:300}
+
+/* PRICING */
+.pricing-section{padding:8rem 5%}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);margin-top:2rem}
+.pc{padding:3.5rem 3rem;border-right:1px solid var(--border);position:relative}
+.pc:last-child{border-right:none}
+.pc.featured{background:var(--black);color:var(--cream)}
+.pc-badge{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem}
+.pc-badge::before{content:'';width:20px;height:1px;background:var(--gold)}
+.pc.featured .pc-badge{color:var(--gold2)}
+.pc.featured .pc-badge::before{background:var(--gold2)}
+.pc-price{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;line-height:1;margin-bottom:.3rem;letter-spacing:-1px}
+.pc-price .currency{font-size:1.5rem}
+.pc.featured .pc-price{color:var(--cream)}
+.pc-period{font-size:.72rem;color:var(--muted);letter-spacing:1px;margin-bottom:1.5rem}
+.pc.featured .pc-period{color:rgba(255,255,255,.35)}
+.pc-desc{font-size:.8rem;color:var(--muted);line-height:1.7;padding-bottom:2rem;margin-bottom:2rem;border-bottom:1px solid var(--border);font-weight:300}
+.pc.featured .pc-desc{color:rgba(255,255,255,.4);border-color:rgba(255,255,255,.08)}
+.pc-features{list-style:none;display:flex;flex-direction:column;gap:1rem;margin-bottom:2.5rem}
+.pc-features li{font-size:.8rem;color:var(--muted);display:flex;gap:.8rem;align-items:flex-start;font-weight:300}
+.pc.featured .pc-features li{color:rgba(255,255,255,.45)}
+.pc-features li::before{content:'—';color:var(--gold);flex-shrink:0}
+.pc.featured .pc-features li::before{color:var(--gold2)}
+.pc-cta{display:block;text-align:center;padding:1rem;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;text-decoration:none;transition:all .3s;border:1px solid var(--black)}
+.pc-cta-dark{background:var(--black);color:var(--cream)}
+.pc-cta-dark:hover{background:var(--gold);border-color:var(--gold);color:var(--black)}
+.pc-cta-gold{background:var(--gold2);color:var(--black);border-color:var(--gold2)}
+.pc-cta-gold:hover{background:var(--gold);border-color:var(--gold)}
+.pc-cta-outline{background:transparent;color:var(--black)}
+.pc-cta-outline:hover{background:var(--black);color:var(--cream)}
+.pc-note{font-size:.68rem;color:var(--muted);text-align:center;margin-top:.8rem;letter-spacing:.5px}
+.pc.featured .pc-note{color:rgba(255,255,255,.25)}
+
+/* TESTIMONIALS */
+.testi-section{padding:8rem 5%;background:var(--cream2);border-top:1px solid var(--border)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);margin-top:4rem}
+.tc{padding:3rem 2.5rem;border-right:1px solid var(--border)}
+.tc:last-child{border-right:none}
+.tc-country{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.tc-quote{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:var(--gold);line-height:1;margin-bottom:1rem;opacity:.3}
+.tc-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;line-height:1.7;color:var(--black);margin-bottom:2rem;font-style:italic}
+.tc-author{display:flex;align-items:center;gap:1rem}
+.tc-avatar{width:44px;height:44px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--gold);background:var(--cream)}
+.tc-name{font-size:.82rem;font-weight:500}
+.tc-role{font-size:.72rem;color:var(--muted);margin-top:.1rem;font-weight:300}
+
+/* FINAL CTA */
+.final-cta{background:var(--black);padding:10rem 5%;text-align:center;position:relative;overflow:hidden}
+.final-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(184,150,46,.08) 0%,transparent 70%)}
+.fci{position:relative;z-index:1;max-width:800px;margin:0 auto}
+.fci h2{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:300;line-height:1.05;letter-spacing:-1px;color:var(--cream);margin-bottom:1.5rem}
+.fci h2 em{font-style:italic;color:var(--gold2)}
+.fci p{font-size:.88rem;color:rgba(255,255,255,.35);margin-bottom:3.5rem;font-weight:300;line-height:1.9;max-width:500px;margin-left:auto;margin-right:auto}
+.fci-form{display:flex;gap:0;max-width:520px;margin:0 auto;border:1px solid rgba(255,255,255,.12)}
+.fci-form input{flex:1;padding:1.2rem 1.5rem;background:transparent;border:none;outline:none;color:var(--cream);font-family:'Inter',sans-serif;font-size:.85rem}
+.fci-form input::placeholder{color:rgba(255,255,255,.2)}
+.fci-form button{padding:1.2rem 2rem;background:var(--gold2);color:var(--black);border:none;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:none;font-family:'Inter',sans-serif;transition:background .3s;white-space:nowrap}
+.fci-form button:hover{background:var(--gold)}
+.fci-note{margin-top:1.5rem;font-size:.7rem;color:rgba(255,255,255,.18);letter-spacing:1px}
+.fci-langs{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap}
+.lang{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:1px}
+
+footer{padding:2.5rem 5%;border-top:1px solid rgba(255,255,255,.07);background:var(--black2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.2rem;color:var(--cream)}
+.footer-logo em{color:var(--gold2);font-style:italic}
+.footer-copy{font-size:.7rem;color:rgba(255,255,255,.2);letter-spacing:1px}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{font-size:.7rem;letter-spacing:1px;color:rgba(255,255,255,.25);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.footer-links a:hover{color:var(--cream)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.anim{opacity:0;animation:fadeUp 1s ease forwards}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.hero-right{display:none}
+  .services-grid,.countries-grid{grid-template-columns:1fr 1fr}
+  .process-steps,.pricing-grid,.testi-grid{grid-template-columns:1fr}
+  .pc,.tc,.p-step{border-right:none;border-bottom:1px solid var(--border)}
+  .pc.featured{border:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .section-header,.gr-top{grid-template-columns:1fr}
+  .timezone-strip{grid-template-columns:1fr 1fr}
+  .philosophy{flex-wrap:wrap}
+  .philosophy-item{min-width:200px;border-bottom:1px solid var(--border)}
+  .nav-links{display:none}
+}
+.wa-btn{position:fixed;bottom:2rem;right:2rem;z-index:999;background:#25D366;color:white;display:flex;align-items:center;gap:.7rem;padding:.9rem 1.5rem;border-radius:100px;text-decoration:none;font-size:.85rem;font-weight:600;font-family:"Inter",sans-serif;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:all .3s;animation:waPulse 2s infinite}.wa-btn:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(37,211,102,.5);background:#20ba5a}@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}50%{box-shadow:0 4px 35px rgba(37,211,102,.7)}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="follower"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Nexa<em>Flow</em> AI</div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#global">Global Reach</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-globe">🌍 Global Agency</div>
+      <a href="#contact" class="nav-cta">Book a Call</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow anim d1">Global AI Automation Agency</div>
+    <h1 class="anim d2">
+      Automate Your<br>
+      Business. <em>Dominate</em><br>
+      <strong>Your Market.</strong>
+    </h1>
+    <p class="hero-desc anim d3">We build intelligent automation systems for businesses across India, UAE, USA, UK, and beyond — so you can scale without limits, 24 hours a day, across every time zone.</p>
+    <div class="hero-btns anim d4">
+      <a href="#contact" class="btn-dark">Book Free Consultation</a>
+      <a href="#services" class="btn-text">Explore Services →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-bg"></div>
+    <div class="hero-right-content">
+      <div class="globe-wrap">
+        <div class="globe">
+          <div class="globe-lines"></div>
+          <div class="globe-dot gd1"></div>
+          <div class="globe-dot gd2" style="animation-delay:.4s"></div>
+          <div class="globe-dot gd3" style="animation-delay:.8s"></div>
+          <div class="globe-dot gd4" style="animation-delay:1.2s"></div>
+          <div class="globe-dot gd5" style="animation-delay:.6s"></div>
+          <div class="globe-dot gd6" style="animation-delay:1s"></div>
+          <div class="globe-ring"></div>
+          <div class="globe-ring2"></div>
+        </div>
+      </div>
+      <div class="hero-stats-row">
+        <div class="hero-stat-item">
+          <div class="h-dot"></div>
+          <span class="h-label">Countries Served</span>
+          <span class="h-val">🇮🇳 🇦🇪 🇺🇸 🇬🇧 🇦🇺</span>
+        </div>
+        <div class="hero-stat-item">
+          <div class="h-dot" style="background:#10b981;animation-delay:.5s"></div>
+          <span class="h-label">Automations Running</span>
+          <span class="h-val">24 / 7 / 365</span>
+        </div>
+        <div class="hero-stat-item">
+          <div class="h-dot" style="background:#3b82f6;animation-delay:1s"></div>
+          <span class="h-label">Avg. Response Time</span>
+          <span class="h-val">&lt; 5 Minutes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL STRIP -->
+<div class="global-strip">
+  <div class="gs-inner">
+    <span class="gs-label">Serving clients across</span>
+    <div class="gs-countries">
+      <div class="gs-country"><span class="flag">🇮🇳</span> India</div>
+      <div class="gs-divider"></div>
+      <div class="gs-country"><span class="flag">🇦🇪</span> UAE</div>
+      <div class="gs-divider"></div>
+      <div class="gs-country"><span class="flag">🇺🇸</span> United States</div>
+      <div class="gs-divider"></div>
+      <div class="gs-country"><span class="flag">🇬🇧</span> United Kingdom</div>
+      <div class="gs-divider"></div>
+      <div class="gs-country"><span class="flag">🇦🇺</span> Australia</div>
+      <div class="gs-divider"></div>
+      <div class="gs-country"><span class="flag">🇨🇦</span> Canada</div>
+      <div class="gs-divider"></div>
+      <div class="gs-country"><span class="flag">🇸🇬</span> Singapore</div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">WhatsApp Automation</span>
+    <span class="marquee-item">Lead Management</span>
+    <span class="marquee-item">AI Chatbots</span>
+    <span class="marquee-item">Appointment Reminders</span>
+    <span class="marquee-item">Invoice Automation</span>
+    <span class="marquee-item">CRM Integration</span>
+    <span class="marquee-item">Email Sequences</span>
+    <span class="marquee-item">Client Onboarding</span>
+    <span class="marquee-item">WhatsApp Automation</span>
+    <span class="marquee-item">Lead Management</span>
+    <span class="marquee-item">AI Chatbots</span>
+    <span class="marquee-item">Appointment Reminders</span>
+    <span class="marquee-item">Invoice Automation</span>
+    <span class="marquee-item">CRM Integration</span>
+    <span class="marquee-item">Email Sequences</span>
+    <span class="marquee-item">Client Onboarding</span>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<div class="philosophy">
+  <div class="philosophy-item">
+    <div class="philosophy-num">01</div>
+    <h3>No Code Required</h3>
+    <p>Zero technical knowledge needed. We handle everything end-to-end, anywhere in the world.</p>
+  </div>
+  <div class="philosophy-item">
+    <div class="philosophy-num">02</div>
+    <h3>Truly Global</h3>
+    <p>WhatsApp, email, SMS, and CRM automation built for businesses across every continent.</p>
+  </div>
+  <div class="philosophy-item">
+    <div class="philosophy-num">03</div>
+    <h3>Live in 7 Days</h3>
+    <p>First call to live automation in under a week — regardless of your time zone.</p>
+  </div>
+  <div class="philosophy-item">
+    <div class="philosophy-num">04</div>
+    <h3>24/7 Support</h3>
+    <p>Round-the-clock support across time zones. We never sleep, just like your automation.</p>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="services-section">
+  <div class="section-header">
+    <div>
+      <div class="section-label-line">Our Expertise</div>
+      <h2>World-Class<br>Automation for Every <em>Industry</em></h2>
+    </div>
+    <div style="padding-top:1rem">
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.9;margin-bottom:1.5rem;font-weight:300">Custom-built for your industry and market. No templates. No shortcuts. Just precision automation that delivers real ROI.</p>
+      <a href="#contact" class="btn-text">View All Solutions →</a>
+    </div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="sc-content">
+        <div class="sc-num">01</div>
+        <div class="sc-icon">🏥</div>
+        <div class="sc-title">Healthcare & Clinics</div>
+        <p class="sc-desc">Appointment reminders, patient follow-ups, feedback automation. Reduces no-shows by 60% for clinics worldwide.</p>
+        <div class="sc-price">From ₹12,000 <span class="sc-tag">/ $150</span></div>
+      </div>
+      <div class="sc-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="sc-content">
+        <div class="sc-num">02</div>
+        <div class="sc-icon">🏠</div>
+        <div class="sc-title">Real Estate</div>
+        <p class="sc-desc">Lead follow-up in under 5 minutes, property alerts, site visit scheduling. For agents from Mumbai to Manhattan.</p>
+        <div class="sc-price">From ₹15,000 <span class="sc-tag">/ $180</span></div>
+      </div>
+      <div class="sc-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="sc-content">
+        <div class="sc-num">03</div>
+        <div class="sc-icon">🛒</div>
+        <div class="sc-title">E-Commerce & Retail</div>
+        <p class="sc-desc">Order confirmations, abandoned cart recovery, review requests, loyalty programs — fully automated globally.</p>
+        <div class="sc-price">From ₹10,000 <span class="sc-tag">/ $120</span></div>
+      </div>
+      <div class="sc-arrow">↗</div>
+    </div>
+    <div class="service-card" style="border-bottom:none">
+      <div class="sc-content">
+        <div class="sc-num">04</div>
+        <div class="sc-icon">📊</div>
+        <div class="sc-title">Finance & Accounting</div>
+        <p class="sc-desc">Invoice automation, payment reminders, document collection, client communication — for CA firms and global finance companies.</p>
+        <div class="sc-price">From ₹12,000 <span class="sc-tag">/ $150</span></div>
+      </div>
+      <div class="sc-arrow">↗</div>
+    </div>
+    <div class="service-card" style="border-bottom:none">
+      <div class="sc-content">
+        <div class="sc-num">05</div>
+        <div class="sc-icon">🤖</div>
+        <div class="sc-title">AI Chatbots</div>
+        <p class="sc-desc">Multilingual intelligent chatbots for WhatsApp, websites, or any platform. Qualifies leads and books appointments 24/7.</p>
+        <div class="sc-price">From ₹20,000 <span class="sc-tag">/ $250</span></div>
+      </div>
+      <div class="sc-arrow">↗</div>
+    </div>
+    <div class="service-card" style="border-bottom:none;border-right:none">
+      <div class="sc-content">
+        <div class="sc-num">06</div>
+        <div class="sc-icon">⚡</div>
+        <div class="sc-title">Custom Workflows</div>
+        <p class="sc-desc">Have a unique process? We map it, build it, and automate it — no matter how complex, no matter where you are.</p>
+        <div class="sc-price">Custom Pricing</div>
+      </div>
+      <div class="sc-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL REACH -->
+<section id="global" class="global-reach">
+  <div class="gr-inner">
+    <div class="gr-top">
+      <div>
+        <div class="section-label-line" style="color:var(--gold2)">
+          <span style="background:var(--gold2);width:30px;height:1px;display:inline-block;margin-right:1rem"></span>
+          Global Reach
+        </div>
+        <h2>We Work Across<br>Every <em>Time Zone</em></h2>
+      </div>
+      <p>From a clinic in Jaipur to a real estate agency in Dubai, from an e-commerce brand in London to a startup in Singapore — we've built automation that works everywhere.</p>
+    </div>
+    <div class="countries-grid">
+      <div class="country-card">
+        <span class="cc-flag">🇮🇳</span>
+        <div class="cc-name">India</div>
+        <div class="cc-region">South Asia</div>
+        <div class="cc-industries">
+          <div class="cc-ind">Clinics & Healthcare</div>
+          <div class="cc-ind">Real Estate</div>
+          <div class="cc-ind">CA & Finance Firms</div>
+          <div class="cc-ind">E-Commerce</div>
+        </div>
+      </div>
+      <div class="country-card">
+        <span class="cc-flag">🇦🇪</span>
+        <div class="cc-name">UAE</div>
+        <div class="cc-region">Middle East</div>
+        <div class="cc-industries">
+          <div class="cc-ind">Real Estate Agencies</div>
+          <div class="cc-ind">Retail & Luxury</div>
+          <div class="cc-ind">Hospitality</div>
+          <div class="cc-ind">Business Services</div>
+        </div>
+      </div>
+      <div class="country-card">
+        <span class="cc-flag">🇺🇸</span>
+        <div class="cc-name">United States</div>
+        <div class="cc-region">North America</div>
+        <div class="cc-industries">
+          <div class="cc-ind">SaaS & Startups</div>
+          <div class="cc-ind">E-Commerce Brands</div>
+          <div class="cc-ind">Coaching & Consulting</div>
+          <div class="cc-ind">Healthcare Clinics</div>
+        </div>
+      </div>
+      <div class="country-card" style="border-right:none">
+        <span class="cc-flag">🇬🇧</span>
+        <div class="cc-name">United Kingdom</div>
+        <div class="cc-region">Europe</div>
+        <div class="cc-industries">
+          <div class="cc-ind">Retail & D2C Brands</div>
+          <div class="cc-ind">Professional Services</div>
+          <div class="cc-ind">Property Management</div>
+          <div class="cc-ind">Digital Agencies</div>
+        </div>
+      </div>
+      <div class="country-card" style="border-bottom:none">
+        <span class="cc-flag">🇦🇺</span>
+        <div class="cc-name">Australia</div>
+        <div class="cc-region">Oceania</div>
+        <div class="cc-industries">
+          <div class="cc-ind">Real Estate</div>
+          <div class="cc-ind">SMBs & Franchises</div>
+          <div class="cc-ind">Healthcare</div>
+        </div>
+      </div>
+      <div class="country-card" style="border-bottom:none">
+        <span class="cc-flag">🇨🇦</span>
+        <div class="cc-name">Canada</div>
+        <div class="cc-region">North America</div>
+        <div class="cc-industries">
+          <div class="cc-ind">E-Commerce</div>
+          <div class="cc-ind">Tech Startups</div>
+          <div class="cc-ind">Service Businesses</div>
+        </div>
+      </div>
+      <div class="country-card" style="border-bottom:none">
+        <span class="cc-flag">🇸🇬</span>
+        <div class="cc-name">Singapore</div>
+        <div class="cc-region">Southeast Asia</div>
+        <div class="cc-industries">
+          <div class="cc-ind">FinTech & Banking</div>
+          <div class="cc-ind">E-Commerce</div>
+          <div class="cc-ind">Corporate Services</div>
+        </div>
+      </div>
+      <div class="country-card" style="border-bottom:none;border-right:none;display:flex;align-items:center;justify-content:center;text-align:center">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:rgba(255,255,255,.15);margin-bottom:.5rem">+</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.25);line-height:1.7">More countries<br>added regularly</div>
+        </div>
+      </div>
+    </div>
+    <!-- TIMEZONE -->
+    <div class="timezone-strip">
+      <div class="tz"><div class="tz-city">Mumbai</div><div class="tz-time" id="tz-in">—</div><div class="tz-label">IST</div></div>
+      <div class="tz"><div class="tz-city">Dubai</div><div class="tz-time" id="tz-uae">—</div><div class="tz-label">GST</div></div>
+      <div class="tz"><div class="tz-city">London</div><div class="tz-time" id="tz-uk">—</div><div class="tz-label">BST / GMT</div></div>
+      <div class="tz"><div class="tz-city">New York</div><div class="tz-time" id="tz-ny">—</div><div class="tz-label">EST / EDT</div></div>
+      <div class="tz" style="border-right:none"><div class="tz-city">Singapore</div><div class="tz-time" id="tz-sg">—</div><div class="tz-label">SGT</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="process-section">
+  <div class="section-label-line">How We Work</div>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;margin-bottom:.5rem">From First Call to <em>Live Automation</em></h2>
+  <p style="font-size:.85rem;color:var(--muted);font-weight:300">The same seamless process — wherever you are in the world.</p>
+  <div class="process-steps">
+    <div class="p-step">
+      <div class="p-step-num">01</div>
+      <div class="p-step-line"></div>
+      <h3>Discovery Call</h3>
+      <p>30-min video call (any time zone). We understand your business, identify pain points, and find the highest-impact automation opportunities.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-step-num">02</div>
+      <div class="p-step-line"></div>
+      <h3>Custom Blueprint</h3>
+      <p>A detailed automation blueprint specific to your business — you approve it before we write a single line of workflow.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-step-num">03</div>
+      <div class="p-step-line"></div>
+      <h3>Build & Test</h3>
+      <p>We build, test every scenario rigorously, and ensure it works flawlessly in your country, timezone, and platform.</p>
+    </div>
+    <div class="p-step" style="border-right:none">
+      <div class="p-step-num">04</div>
+      <div class="p-step-line"></div>
+      <h3>Launch & Support</h3>
+      <p>We go live, train your team remotely, and stay available around the clock via WhatsApp or email for any adjustments.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing-section">
+  <div class="section-label-line">Investment</div>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;margin-bottom:1.5rem">Pricing That Works<br><em>Globally</em></h2>
+  <div class="pricing-grid">
+    <div class="pc">
+      <div class="pc-badge">Starter</div>
+      <div class="pc-price"><span class="currency">₹</span>12,000 <span style="font-size:1.2rem;color:var(--muted)">/ $150</span></div>
+      <div class="pc-period">One-time setup</div>
+      <p class="pc-desc">For businesses taking their first step into automation — anywhere in the world.</p>
+      <ul class="pc-features">
+        <li>1 Complete Automation Workflow</li>
+        <li>WhatsApp or Email Integration</li>
+        <li>Google Sheets / CRM Connection</li>
+        <li>7-Day Testing Period</li>
+        <li>Video Walkthrough & Training</li>
+      </ul>
+      <a href="#contact" class="pc-cta pc-cta-dark">Get Started</a>
+    </div>
+    <div class="pc featured">
+      <div class="pc-badge">Growth — Most Popular</div>
+      <div class="pc-price"><span class="currency">₹</span>25,000 <span style="font-size:1.2rem;color:rgba(255,255,255,.3)">/ $300</span></div>
+      <div class="pc-period">One-time setup</div>
+      <p class="pc-desc">For businesses serious about scaling with the full power of AI automation.</p>
+      <ul class="pc-features">
+        <li>3 Custom Automation Workflows</li>
+        <li>WhatsApp + Email + CRM Integration</li>
+        <li>AI-Powered Lead Qualification</li>
+        <li>Priority WhatsApp Support</li>
+        <li>30-Day Free Maintenance</li>
+        <li>Monthly Performance Report</li>
+      </ul>
+      <a href="#contact" class="pc-cta pc-cta-gold">Book a Call →</a>
+    </div>
+    <div class="pc">
+      <div class="pc-badge">Retainer</div>
+      <div class="pc-price"><span class="currency">₹</span>15,000 <span style="font-size:1.2rem;color:var(--muted)">/ $180</span></div>
+      <div class="pc-period">Per month</div>
+      <p class="pc-desc">Your dedicated global automation partner — ongoing builds, maintenance, and strategy.</p>
+      <ul class="pc-features">
+        <li>2 New Workflows Per Month</li>
+        <li>Unlimited Maintenance & Updates</li>
+        <li>Weekly Performance Review</li>
+        <li>Dedicated Specialist Access</li>
+        <li>4-Hour Priority Response</li>
+        <li>Monthly Strategy Call (Video)</li>
+      </ul>
+      <a href="#contact" class="pc-cta pc-cta-outline">Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="section-label-line">Global Client Voices</div>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;margin-bottom:.3rem">What the World <em>Says</em></h2>
+  <div class="testi-grid">
+    <div class="tc">
+      <div class="tc-country">🇮🇳 India</div>
+      <div class="tc-quote">"</div>
+      <p class="tc-text">Our clinic's no-show rate dropped by 60% in the first month. The WhatsApp reminder system pays for itself every week.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">DR</div>
+        <div><div class="tc-name">Dr. Rajesh Sharma</div><div class="tc-role">Orthopedic Clinic, Jaipur</div></div>
+      </div>
+    </div>
+    <div class="tc">
+      <div class="tc-country">🇦🇪 UAE</div>
+      <div class="tc-quote">"</div>
+      <p class="tc-text">Every lead now gets an automated follow-up within 5 minutes. Our conversion rate has doubled since we started with NexaFlow.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">KA</div>
+        <div><div class="tc-name">Khalid Al-Mansoori</div><div class="tc-role">Real Estate Agency, Dubai</div></div>
+      </div>
+    </div>
+    <div class="tc" style="border-right:none">
+      <div class="tc-country">🇬🇧 United Kingdom</div>
+      <div class="tc-quote">"</div>
+      <p class="tc-text">Brilliant service. They built our entire client onboarding automation in under a week. Professional, responsive, and incredibly effective.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">SE</div>
+        <div><div class="tc-name">Sarah Ellis</div><div class="tc-role">Marketing Agency, London</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="contact" class="final-cta">
+  <div class="fci">
+    <h2>Ready to Automate<br>Your Business <em>Globally?</em></h2>
+    <p>Book a free 30-minute video consultation. We work across all time zones and will find a slot that works perfectly for you.</p>
+    <div class="fci-form">
+      <input type="text" placeholder="WhatsApp / Email — any country..." />
+      <button onclick="bookCall()">Book Free Call</button>
+    </div>
+    <p class="fci-note">✦ 100% Free &nbsp;&nbsp; ✦ No Commitment &nbsp;&nbsp; ✦ Works Across All Time Zones</p>
+    <div class="fci-langs">
+      <span class="lang">🇮🇳 Hindi</span>
+      <span class="lang">🇬🇧 English</span>
+      <span class="lang">🇦🇪 Arabic</span>
+      <span class="lang">🇩🇪 German</span>
+      <span class="lang">🇫🇷 French</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Nexa<em>Flow</em> AI</div>
+  <p class="footer-copy">© 2025 NexaFlow AI — Global AI Automation Agency</p>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#global">Global</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+function bookCall(){
+  const input = document.querySelector(".fci-form input");
+  const num = input ? input.value.trim() : "";
+  if(!num){ alert("Please enter your WhatsApp number!"); return; }
+  const msg = encodeURIComponent("Hi NexaFlow AI! I want to book a free consultation. My number is: " + num);
+  window.open("https://wa.me/918003441823?text=" + msg, "_blank");
+}
+// Cursor
+const cursor=document.getElementById('cursor'),follower=document.getElementById('follower');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+function af(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;follower.style.left=fx+'px';follower.style.top=fy+'px';requestAnimationFrame(af)}af();
+document.querySelectorAll('a,button,.service-card,.country-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>follower.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>follower.classList.remove('hover'));
+});
+
+// Live Clocks
+function updateClocks(){
+  const now=new Date();
+  const fmt=(tz)=>new Intl.DateTimeFormat('en',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:tz}).format(now);
+  document.getElementById('tz-in').textContent=fmt('Asia/Kolkata');
+  document.getElementById('tz-uae').textContent=fmt('Asia/Dubai');
+  document.getElementById('tz-uk').textContent=fmt('Europe/London');
+  document.getElementById('tz-ny').textContent=fmt('America/New_York');
+  document.getElementById('tz-sg').textContent=fmt('Asia/Singapore');
+}
+updateClocks();setInterval(updateClocks,1000);
+
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:.1});
+document.querySelectorAll('.philosophy-item,.p-step,.pc,.tc,.country-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity .7s ease,transform .7s ease';
+  obs.observe(el);
+});
+</script>
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/918003441823?text=Hi%20NexaFlow%20AI!%20I%20want%20to%20book%20a%20free%20consultation." target="_blank" class="wa-btn" id="wa-btn">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span>Chat on WhatsApp</span>
+</a>
+</body>
+</html>
